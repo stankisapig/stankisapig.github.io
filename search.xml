@@ -1,55 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>From Telepathic Development to Contract-Oriented: Why Spec and Unit Tests are Life Savers</title>
-    <url>/2026/02/25/spec-and-unit-test/</url>
-    <content><![CDATA[<p>Looking back at my time in my previous company, the development environment was quite “wild.” We lacked formal development standards—even PEP8, Linters, or Formatters were only reluctantly introduced in the later stages of projects. At that time, our most hardcore way of communicating was simply looking at the Database.</p>
-<p>Back then, there was no such thing as an API Spec. The only intersection between front-end and back-end developers was:</p>
-<blockquote>
-<p>“Hey, I’ve opened the new fields for that feature in the UserStatus table.”<br>“The type is VARCHAR(10), go ahead and connect to it yourself.”</p>
-</blockquote>
-<p>We treated the database as the “Source of Truth,” completely ignoring the massive deviations that can occur when different program logics interpret the same data.</p>
-<span id="more"></span>
-
-<h3 id="1-A-Painful-Lesson-When-“Booleans”-Become-a-Mystery"><a href="#1-A-Painful-Lesson-When-“Booleans”-Become-a-Mystery" class="headerlink" title="1. A Painful Lesson: When “Booleans” Become a Mystery"></a>1. A Painful Lesson: When “Booleans” Become a Mystery</h3><p>Without a defined Spec, development is like playing an expensive guessing game. One example that stands out is the definition of a <code>status</code> field.</p>
-<p>During our verbal discussion, everyone agreed it was a simple toggle concept. However, when it came to implementation:</p>
-<ul>
-<li><strong>Back-end Engineer</strong>: Intuitively returned a Boolean <code>True</code> &#x2F; <code>False</code>.</li>
-<li><strong>Front-end Engineer</strong>: Based on past experience, wrote the logic to expect strings <code>&quot;Y&quot;</code> &#x2F; <code>&quot;N&quot;</code>.</li>
-</ul>
-<p>The result? The front-end display was permanently broken. Both sides sat staring at the screen during debugging: “I thought we agreed it would be like this…” This kind of low-level error caused by a communication breakdown is exactly why a standard <strong>OpenAPI Spec</strong> is needed as a development contract.</p>
-<h3 id="2-OpenAPI-Spec-No-More-Relying-on-Intuition"><a href="#2-OpenAPI-Spec-No-More-Relying-on-Intuition" class="headerlink" title="2. OpenAPI Spec: No More Relying on Intuition"></a>2. OpenAPI Spec: No More Relying on Intuition</h3><p>To avoid the tragedies mentioned above, defining a clear YAML document is the first step. It defines not only types but also formats and Enums.</p>
-<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="attr">openapi:</span> <span class="number">3.0</span><span class="number">.0</span></span><br><span class="line"><span class="attr">info:</span></span><br><span class="line">  <span class="attr">title:</span> <span class="string">User</span> <span class="string">Status</span> <span class="string">Update</span> <span class="string">API</span></span><br><span class="line">  <span class="attr">version:</span> <span class="number">1.0</span><span class="number">.0</span></span><br><span class="line"><span class="attr">paths:</span></span><br><span class="line">  <span class="string">/user/status:</span></span><br><span class="line">    <span class="attr">get:</span></span><br><span class="line">      <span class="attr">summary:</span> <span class="string">Get</span> <span class="string">current</span> <span class="string">user</span> <span class="string">status</span></span><br><span class="line">      <span class="attr">responses:</span></span><br><span class="line">        <span class="attr">&#x27;200&#x27;:</span></span><br><span class="line">          <span class="attr">description:</span> <span class="string">Success</span></span><br><span class="line">          <span class="attr">content:</span></span><br><span class="line">            <span class="attr">application/json:</span></span><br><span class="line">              <span class="attr">schema:</span></span><br><span class="line">                <span class="attr">type:</span> <span class="string">object</span></span><br><span class="line">                <span class="attr">properties:</span></span><br><span class="line">                  <span class="attr">is_active:</span></span><br><span class="line">                    <span class="attr">type:</span> <span class="string">boolean</span></span><br><span class="line">                    <span class="attr">description:</span> <span class="string">&quot;Explicitly defined as a Boolean; no more debate over Y/N or True/False&quot;</span></span><br><span class="line">                    <span class="attr">example:</span> <span class="literal">true</span></span><br></pre></td></tr></table></figure>
-
-<h3 id="3-Beyond-Specs-Why-Do-We-Need-Unit-Tests"><a href="#3-Beyond-Specs-Why-Do-We-Need-Unit-Tests" class="headerlink" title="3. Beyond Specs, Why Do We Need Unit Tests?"></a>3. Beyond Specs, Why Do We Need Unit Tests?</h3><p>While Specs solve external communication issues, internal logic correctness relies on Unit Tests.<br>Many people feel that writing tests is a waste of time. In reality, unit tests are meant to catch those “I thought it was fine” moments. A good test shouldn’t just check the “Happy Path”; it should rigorously verify the following scenarios:</p>
-<ol>
-<li>Happy Path: Ensuring the system works as expected when input is correct.</li>
-<li>Edge Cases:</li>
-</ol>
-<ul>
-<li>What happens if the API receives a null value?</li>
-<li>What happens if a string length exceeds the VARCHAR limit set in the DB?</li>
-</ul>
-<ol start="3">
-<li>Boundary Testing:</li>
-</ol>
-<ul>
-<li>Does the logic collapse when a numerical value is 0 or negative?</li>
-<li>How does the system behave when an array length is exactly at its upper or lower limit?</li>
-</ul>
-<p>Comprehensive unit tests give us the confidence (the “bottom line”) to refactor or add new features without breaking existing ones.</p>
-<h3 id="From-Writing-Code-to-Building-Stable-Systems"><a href="#From-Writing-Code-to-Building-Stable-Systems" class="headerlink" title="From Writing Code to Building Stable Systems"></a>From Writing Code to Building Stable Systems</h3><p>Moving from having zero standards to learning to write the Spec before starting—and thinking about test cases before writing logic—has been the biggest shift in my development mindset. The Spec is a commitment to the outside world; Unit Testing is self-discipline for the inside.<br>Good software engineering isn’t about who writes code the fastest; it’s about who can ensure the system remains stable and maintainable one, or even three years down the road.</p>
-]]></content>
-      <categories>
-        <category>Tech Sharing</category>
-      </categories>
-      <tags>
-        <tag>Software Engineering</tag>
-        <tag>OpenAPI</tag>
-        <tag>Unit Test</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>從電信業到資安外商：一場轉職震撼教育</title>
     <url>/2026/02/13/career-shift-trend-micro/</url>
     <content><![CDATA[<p>在趨勢科技待了快三個月，這段時間最深刻的體悟就是——我正在經歷一場全方位的「砍掉重練」。</p>
@@ -108,6 +59,55 @@
       <tags>
         <tag>Project Management</tag>
         <tag>Soft Skills</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>From Telepathic Development to Contract-Oriented: Why Spec and Unit Tests are Life Savers</title>
+    <url>/2026/02/25/spec-and-unit-test/</url>
+    <content><![CDATA[<p>Looking back at my time in my previous company, the development environment was quite “wild.” We lacked formal development standards—even PEP8, Linters, or Formatters were only reluctantly introduced in the later stages of projects. At that time, our most hardcore way of communicating was simply looking at the Database.</p>
+<p>Back then, there was no such thing as an API Spec. The only intersection between front-end and back-end developers was:</p>
+<blockquote>
+<p>“Hey, I’ve opened the new fields for that feature in the UserStatus table.”<br>“The type is VARCHAR(10), go ahead and connect to it yourself.”</p>
+</blockquote>
+<p>We treated the database as the “Source of Truth,” completely ignoring the massive deviations that can occur when different program logics interpret the same data.</p>
+<span id="more"></span>
+
+<h3 id="1-A-Painful-Lesson-When-“Booleans”-Become-a-Mystery"><a href="#1-A-Painful-Lesson-When-“Booleans”-Become-a-Mystery" class="headerlink" title="1. A Painful Lesson: When “Booleans” Become a Mystery"></a>1. A Painful Lesson: When “Booleans” Become a Mystery</h3><p>Without a defined Spec, development is like playing an expensive guessing game. One example that stands out is the definition of a <code>status</code> field.</p>
+<p>During our verbal discussion, everyone agreed it was a simple toggle concept. However, when it came to implementation:</p>
+<ul>
+<li><strong>Back-end Engineer</strong>: Intuitively returned a Boolean <code>True</code> &#x2F; <code>False</code>.</li>
+<li><strong>Front-end Engineer</strong>: Based on past experience, wrote the logic to expect strings <code>&quot;Y&quot;</code> &#x2F; <code>&quot;N&quot;</code>.</li>
+</ul>
+<p>The result? The front-end display was permanently broken. Both sides sat staring at the screen during debugging: “I thought we agreed it would be like this…” This kind of low-level error caused by a communication breakdown is exactly why a standard <strong>OpenAPI Spec</strong> is needed as a development contract.</p>
+<h3 id="2-OpenAPI-Spec-No-More-Relying-on-Intuition"><a href="#2-OpenAPI-Spec-No-More-Relying-on-Intuition" class="headerlink" title="2. OpenAPI Spec: No More Relying on Intuition"></a>2. OpenAPI Spec: No More Relying on Intuition</h3><p>To avoid the tragedies mentioned above, defining a clear YAML document is the first step. It defines not only types but also formats and Enums.</p>
+<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="attr">openapi:</span> <span class="number">3.0</span><span class="number">.0</span></span><br><span class="line"><span class="attr">info:</span></span><br><span class="line">  <span class="attr">title:</span> <span class="string">User</span> <span class="string">Status</span> <span class="string">Update</span> <span class="string">API</span></span><br><span class="line">  <span class="attr">version:</span> <span class="number">1.0</span><span class="number">.0</span></span><br><span class="line"><span class="attr">paths:</span></span><br><span class="line">  <span class="string">/user/status:</span></span><br><span class="line">    <span class="attr">get:</span></span><br><span class="line">      <span class="attr">summary:</span> <span class="string">Get</span> <span class="string">current</span> <span class="string">user</span> <span class="string">status</span></span><br><span class="line">      <span class="attr">responses:</span></span><br><span class="line">        <span class="attr">&#x27;200&#x27;:</span></span><br><span class="line">          <span class="attr">description:</span> <span class="string">Success</span></span><br><span class="line">          <span class="attr">content:</span></span><br><span class="line">            <span class="attr">application/json:</span></span><br><span class="line">              <span class="attr">schema:</span></span><br><span class="line">                <span class="attr">type:</span> <span class="string">object</span></span><br><span class="line">                <span class="attr">properties:</span></span><br><span class="line">                  <span class="attr">is_active:</span></span><br><span class="line">                    <span class="attr">type:</span> <span class="string">boolean</span></span><br><span class="line">                    <span class="attr">description:</span> <span class="string">&quot;Explicitly defined as a Boolean; no more debate over Y/N or True/False&quot;</span></span><br><span class="line">                    <span class="attr">example:</span> <span class="literal">true</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="3-Beyond-Specs-Why-Do-We-Need-Unit-Tests"><a href="#3-Beyond-Specs-Why-Do-We-Need-Unit-Tests" class="headerlink" title="3. Beyond Specs, Why Do We Need Unit Tests?"></a>3. Beyond Specs, Why Do We Need Unit Tests?</h3><p>While Specs solve external communication issues, internal logic correctness relies on Unit Tests.<br>Many people feel that writing tests is a waste of time. In reality, unit tests are meant to catch those “I thought it was fine” moments. A good test shouldn’t just check the “Happy Path”; it should rigorously verify the following scenarios:</p>
+<ol>
+<li>Happy Path: Ensuring the system works as expected when input is correct.</li>
+<li>Edge Cases:</li>
+</ol>
+<ul>
+<li>What happens if the API receives a null value?</li>
+<li>What happens if a string length exceeds the VARCHAR limit set in the DB?</li>
+</ul>
+<ol start="3">
+<li>Boundary Testing:</li>
+</ol>
+<ul>
+<li>Does the logic collapse when a numerical value is 0 or negative?</li>
+<li>How does the system behave when an array length is exactly at its upper or lower limit?</li>
+</ul>
+<p>Comprehensive unit tests give us the confidence (the “bottom line”) to refactor or add new features without breaking existing ones.</p>
+<h3 id="From-Writing-Code-to-Building-Stable-Systems"><a href="#From-Writing-Code-to-Building-Stable-Systems" class="headerlink" title="From Writing Code to Building Stable Systems"></a>From Writing Code to Building Stable Systems</h3><p>Moving from having zero standards to learning to write the Spec before starting—and thinking about test cases before writing logic—has been the biggest shift in my development mindset. The Spec is a commitment to the outside world; Unit Testing is self-discipline for the inside.<br>Good software engineering isn’t about who writes code the fastest; it’s about who can ensure the system remains stable and maintainable one, or even three years down the road.</p>
+]]></content>
+      <categories>
+        <category>Tech Sharing</category>
+      </categories>
+      <tags>
+        <tag>Software Engineering</tag>
+        <tag>OpenAPI</tag>
+        <tag>Unit Test</tag>
       </tags>
   </entry>
 </search>
